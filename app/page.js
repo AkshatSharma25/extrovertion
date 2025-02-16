@@ -9,23 +9,33 @@ import { useRouter } from 'next/navigation';
 import Navbar from "@/components/Navbar";
 
 export default function Home() {
-    const { data: session } = useSession();
-    const router=useRouter();
-    useEffect(()=>{ 
-      // console.log(session);
-      if (!session) {
-        router.replace('/login');
-      }
-    })
-    
+  const router = useRouter();
+  useEffect(() => {
+  })
+
   return (
     <>
-      <Navbar/>
-      <div className="grid grid-cols-5 h-[92vh] overflow-x-hidden overflow-y-hidden">
+      <div className="w-full">
         
-        <LeftContainer />
-        <MiddleContainer/>
-        <RightContainer />
+      <Navbar />
+      </div>
+      <div className="grid grid-cols-5 h-[92vh] overflow-x-hidden overflow-y-hidden">
+
+        <div className="flex w-[100vw]">
+
+          <div className=" sm:hidden md:hidden lg:block w-[20vw]">
+
+            <LeftContainer />
+          </div>
+          <div className="sm:w-[100vw] lg:w-[60vw]">
+
+            <MiddleContainer />
+          </div>
+          <div className="sm:hidden md:hidden lg:block">
+            <RightContainer />
+
+          </div>
+        </div>
       </div>
     </>
   );

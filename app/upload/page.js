@@ -1,4 +1,4 @@
-// components/ImageUpload.js
+
 "use client"
 import { useState } from 'react';
 

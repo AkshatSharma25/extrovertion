@@ -8,7 +8,6 @@ import axios from "axios";
 const Navbar = () => {
   const [searchText, setsearchText] = useState("");
   const [name, setName] = useState("Name");
-  const { data: session } = useSession();
   const [openSearch, setOpenSearch] = useState(false);
   const [DropDownOpen, setDropDownOpen] = useState(false);
   const [SearchToolTip, setSearchToolTip] = useState(false);
@@ -18,8 +17,7 @@ const Navbar = () => {
   };
   const submitFollow=async (to)=>{
     const object={
-      from:session.user._doc._id,
-      to:to
+      
     }
      try{
       const response=await axios.patch("/api/follow", object);
@@ -30,10 +28,7 @@ const Navbar = () => {
      } 
   }
   useEffect(() => {
-    if (session) {
-      // console.log(session.user.name);
-      setName(session.user.email.split("@")[0]);
-    }
+    
   });
   const updateSearch = (e) => {
     setsearchText(e.target.value);
@@ -64,7 +59,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <div className=" h-14 w-[99vw] flex  justify-between px-12 bg-white items-center">
+      <div className=" h-14 w-[98vw] flex  justify-between px-12 bg-white items-center">
         <Link href="/" className="ml-8">
           <img src="/logo.png" width={200} className="" />
         </Link>

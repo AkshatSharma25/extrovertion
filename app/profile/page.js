@@ -7,8 +7,7 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const Profile = () => {
   const [ClickOnPost, setClickOnPost] = useState(false);
-  const [popupData, setpopupData] = useState([])
-  const { data: session } = useSession();   
+  const [popupData, setpopupData] = useState([]);   
   const [name, setname] = useState("Name");
   const [postData, setPostData] = useState([]);
   const [tagline, settagline] = useState("hello");
@@ -36,29 +35,10 @@ const Profile = () => {
     // console.log(data);
   }
   useEffect(() => {
-    if (!session) {
-      router.replace("/login");
-    }
-    if (session) {
-      setname(session.user.name);
-      setuserName(session.user.email.split("@")[0]);
-      setPosts(session.user._doc.posts.length);
-      setfollowers(session.user._doc.followers.length);
-      setFollowing(session.user._doc.following.length);
-      setimgUrl(session.user._doc.profile);
-      settagline(session.user._doc.tagline);
-      if(posts>0){
-        setPostsExist(true);
-      }
-      async function fetch() {
-        await getImages();
-      }
-      if(postData.length==0){
-        fetch();
-      }
-    }
     
-  }, [session]);
+    
+    
+  }, []);
   
 
   return (

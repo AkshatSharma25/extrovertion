@@ -3,9 +3,7 @@ import React,{useState} from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 const Register = () => {
-  // const email
-  const {data:session,update}=useSession();
-  const [Email, setEmail] = useState("");
+  // const emailconst [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [confirmPassword,setconfirmPassword]=useState("");
@@ -31,27 +29,7 @@ const Register = () => {
     setuserName(e.target.value);
   }
   const submit=async(e)=>{
-    try{
-
     
-    e.preventDefault();
-    const response=await axios.post("/api/register",{email:Email,password:Password,name:fullName,userName:userName});
-    // console.log(response);
-    // console.log(response.status,"helll")
-    console.log(session);
-    if(response.status==200){
-      // let session=getSession();
-      await update({
-        ...session,
-        user:response.data
-      })
-      console.log("hello world");
-      console.log(session);
-    }
-  }
-  catch(error){
-    console.log(error.message);
-  }
   }
   return (
     <>

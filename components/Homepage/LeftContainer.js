@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 const LeftContainer = () => {
   const router=useRouter();
-  const { data: session } = useSession();
   
   const [name, setname] = useState("Name");
   const [userName, setuserName] = useState("username");
@@ -14,18 +13,7 @@ const LeftContainer = () => {
   const [following, setFollowing] = useState(0);
   const [imgUrl, setimgUrl]=useState("https://w7.pngwing.com/pngs/193/660/png-transparent-computer-icons-woman-avatar-avatar-girl-thumbnail.png")
   useEffect(()=>{
-    if(session){
-      console.log(session);
-      setname(session.user.name);
-      setuserName(session.user.email.split('@')[0]);
-      // console.log(session.user);
-      if(session.user._doc){setPosts(session.user._doc.posts.length);}
-      setfollowers(session.user._doc.followers.length);
-      setFollowing(session.user._doc.following.length);
-      setimgUrl(session.user._doc.profile);
-      
-
-    }
+    
     
   })
   return (

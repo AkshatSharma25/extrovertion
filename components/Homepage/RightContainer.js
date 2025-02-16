@@ -8,7 +8,7 @@ const RightContainer = () => {
   const [CreatePost, setCreatePost] = useState(false);
   const [previewImage, setPreviewImage] = useState();
   const [PostCaption, setPostCaption] = useState("This is Extrovertion");
-  const session=useSession();
+
   const addCaption = (event) => {
     setPostCaption(event.target.value);
     // console.log(PostCaption);
@@ -21,9 +21,7 @@ const RightContainer = () => {
         const response = await axios.post("/api/upload", formData);
         // console.log(response.data);
         
-        // console.log(session.data.user._doc);
-        const userId=session.data.user._doc._id;
-        const imageUrl=response.data.path;
+        
         const requestObject={
           userId:userId,
           imageUrl:imageUrl,
