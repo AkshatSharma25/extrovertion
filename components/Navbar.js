@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const Navbar = () => {
+  const router = useRouter();
   const [searchText, setsearchText] = useState("");
-  const [name, setName] = useState("Name");
+  const [name, setName] = useState("More");
   const [openSearch, setOpenSearch] = useState(false);
   const [DropDownOpen, setDropDownOpen] = useState(false);
   const [SearchToolTip, setSearchToolTip] = useState(false);
@@ -15,6 +15,10 @@ const Navbar = () => {
   const handleDropdownToggle = () => {
     setDropDownOpen(!DropDownOpen);
   };
+  const handleSignOut = async () => {
+    localStorage.removeItem('token');
+    router.replace('/login');
+  }
   const submitFollow=async (to)=>{
     const object={
       
@@ -227,7 +231,7 @@ const Navbar = () => {
               <li>
                 <button
                   onClick={() => {
-                    signOut();
+                    handleSignOut();
                   }}
                   className="block px-4 py-2 w-full text-start hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >

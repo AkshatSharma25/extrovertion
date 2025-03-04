@@ -1,16 +1,57 @@
-import React from 'react'
-
+"use client"
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/navigation';
+import { useState } from 'react'
+import { toastOptions } from '../components/toast'
+import { ToastContainer, toast } from "react-toastify";
+import axios from 'axios';
+import Link from 'next/link'
 const Login = () => {
+    const load = true;
+    const router = useRouter();
+    useEffect(() => {
+        // console.log("hell")
+        const token = localStorage.getItem('token');
+        if (token) {
+            router.replace('/profile');
+        }
+        // console.log(token);
+    }, [load]);
+
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // console.log(userName,password);
+        toast.success("Waiting for server response!", toastOptions);
+        try {
+            const data = await axios.post('/api/auth/login', {
+                userName: userName,
+                password: password
+            })
+            // console.log(data);
+            const token = data.data.token;
+            // console.log(token);
+            if (!token) {
+                toast.error("Invalid Credentials", toastOptions);
+                console.log("Invalid credentials");
+                return;
+            }
+            else {
+                toast.success("Login Successful!", toastOptions);
+                localStorage.setItem('token', token);
+                // console.log("Login Successful");
+                router.replace('/profile')
+            }
+        }
+        catch (error) {
+            toast.error("Invalid credentials", toastOptions);
+            console.log(error);
+        }
+
+    }
     return (
         <div>
-
-
-            {/*
-  Heads up! 👋
-
-  Plugins:
-    - @tailwindcss/forms
-*/}
 
             <section className="bg-gray-200">
                 <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -55,16 +96,18 @@ const Login = () => {
                                 </p>
                             </div>
                             <div className='sm:hidden lg:block text-3xl font-extrabold '>
-                                Create an Extrovertion Account
+                                LogIn to your Extrovertion Account
                             </div>
 
                             <form action="#" className="mt-8 grid grid-cols-6 gap-6">
-                                <div className="col-span-6 h-8 sm:col-span-3">
+
+                                <div className="col-span-6 h-8 sm:col-span-6">
                                     <label htmlFor="FirstName" className="block text-sm font-medium text-gray-700">
-                                        First Name
+                                        Username
                                     </label>
 
                                     <input
+                                        onChange={(e) => setUserName(e.target.value)}
                                         type="text"
                                         id="FirstName"
                                         name="first_name"
@@ -72,34 +115,14 @@ const Login = () => {
                                     />
                                 </div>
 
-                                <div className="col-span-6 h-8 sm:col-span-3">
-                                    <label htmlFor="LastName" className="block text-sm font-medium text-gray-700">
-                                        Last Name
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        id="LastName"
-                                        name="last_name"
-                                        className="mt-1 px-2 h-full w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                                    />
-                                </div>
                                 <div className='h-[1/2]'></div>
-                                <div className="col-span-6">
-                                    <label htmlFor="Email" className="block h-4 text-sm font-medium text-gray-700"> Email </label>
 
-                                    <input
-                                        type="email"
-                                        id="Email"
-                                        name="email"
-                                        className="mt-1 px-2 w-full h-[80%] rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                                    />
-                                </div>
 
-                                <div className="col-span-6 h-8 sm:col-span-3">
+                                <div className="col-span-6 h-8 sm:col-span-6">
                                     <label htmlFor="Password" className="block text-sm font-medium text-gray-700"> Password </label>
 
                                     <input
+                                        onChange={(e) => setPassword(e.target.value)}
                                         type="password"
                                         id="Password"
                                         name="password"
@@ -107,18 +130,7 @@ const Login = () => {
                                     />
                                 </div>
 
-                                <div className="col-span-6 h-8 sm:col-span-3">
-                                    <label htmlFor="PasswordConfirmation" className="block text-sm font-medium text-gray-700">
-                                        Password Confirmation
-                                    </label>
 
-                                    <input
-                                        type="password"
-                                        id="PasswordConfirmation"
-                                        name="password_confirmation"
-                                        className="mt-1 px-2 w-full h-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                                    />
-                                </div>
                                 <div className='h-2'></div>
 
 
@@ -133,14 +145,15 @@ const Login = () => {
 
                                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                                     <button
+                                        onClick={(e) => handleSubmit(e)}
                                         className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
                                     >
                                         Create an account
                                     </button>
 
                                     <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                                        Already have an account?
-                                        <a href="#" className="text-gray-700 underline">Log in</a>.
+                                        Don't have an account?
+                                        <Link href="/register" className="text-gray-700 underline">Create Account</Link>.
                                     </p>
                                 </div>
                             </form>
@@ -148,6 +161,7 @@ const Login = () => {
                     </main>
                 </div>
             </section>
+            <ToastContainer />
         </div>
     )
 }

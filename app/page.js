@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect } from "react"
-import { useSession, signIn, signOut } from "next-auth/react"
-
+import axios from "axios";
 import LeftContainer from "@/components/Homepage/LeftContainer";
 import MiddleContainer from "@/components/Homepage/MiddleContainer";
 import RightContainer from "@/components/Homepage/RightContainer";
@@ -10,8 +9,14 @@ import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const router = useRouter();
+  const load = true;
   useEffect(() => {
-  })
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+    }
+    axios.get('/api/auth/protected',{token})
+  }, [load]);
 
   return (
     <>

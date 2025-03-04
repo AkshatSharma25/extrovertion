@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import axios from "axios";
+import { set } from "mongoose";
 const Profile = () => {
+  const router = useRouter();
+  const load = true;
   const [ClickOnPost, setClickOnPost] = useState(false);
   const [popupData, setpopupData] = useState([]);   
   const [name, setname] = useState("Name");
@@ -19,13 +21,33 @@ const Profile = () => {
   const [imgUrl, setimgUrl] = useState(
     "https://w7.pngwing.com/pngs/193/660/png-transparent-computer-icons-woman-avatar-avatar-girl-thumbnail.png"
   );
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) { 
+      router.replace('/login');
+      return;
+    }
+    axios.get("/api/protected", {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((response) => {
+      setname(response.data.user.name);
+      setuserName(response.data.user.userName);
+      settagline(response.data.user.description);
+      setimgUrl(response.data.user.profileImage);
+    }).catch((error) => { 
+      localStorage.removeItem('token');
+      router.replace('/login');
+      return;
+     });
+  }, [load]);
+
+
   const togglePostView=()=>{
     if(!ClickOnPost){
       console.log(popupData)
     }
     setClickOnPost(!ClickOnPost);
   }
-  const router = useRouter();
   async function getImages() {
     const response=await axios.get(`http://localhost:3000/api/post/getallpost/${session.user._doc._id}`);
     // console.log(response);
