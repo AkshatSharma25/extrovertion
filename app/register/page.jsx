@@ -39,7 +39,7 @@ const Register = () => {
             // console.log(token.data.data);
             localStorage.setItem('token', token.data.data);
             toast.success("Account Created Successfully!", toastOptions);
-            router.push('/profile');
+            router.push('/');
             // console.log(name, userName, email, password, confirmPassword, imageUrl);
         }
         catch (error) {

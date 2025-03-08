@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-
-const Navbar = () => {
+import { toast } from "react-toastify";
+import { toastOptions } from "@/app/components/toast";
+const Navbar = (userName) => {
   const router = useRouter();
+  const [isFollowing, setIsFollowing] = useState("Follow");
   const [searchText, setsearchText] = useState("");
   const [name, setName] = useState("More");
   const [openSearch, setOpenSearch] = useState(false);
@@ -19,21 +21,23 @@ const Navbar = () => {
     localStorage.removeItem('token');
     router.replace('/login');
   }
-  const submitFollow=async (to)=>{
+  const submitFollow = async (to) => {
+    setIsFollowing("request sent");
+    // sessionStorage.setItem('user', to);
     const object={
-      
+      from: userName,
+      to:to
     }
-     try{
+    try {
+      console.log(object);
       const response=await axios.patch("/api/follow", object);
-      console.log(response);
+      // console.log(response);
+      toast.success("Followed request send!", toastOptions);
      }
      catch(error){
       console.log(error.message);
      } 
   }
-  useEffect(() => {
-    
-  });
   const updateSearch = (e) => {
     setsearchText(e.target.value);
     
@@ -44,7 +48,6 @@ const Navbar = () => {
     // console.log(openSearch);
   };
   const SubmitSearch = async () => {
-    // console.log(searchText)
     if (searchText != "") {
       try {
         const response = await axios.get(`/api/user/search/${searchText}`);
@@ -54,7 +57,7 @@ const Navbar = () => {
         }
       } catch (error) {
         console.log(error.message);
-        a;
+        // a;
       }
       setSearchToolTip(false);
     } else {
@@ -140,15 +143,17 @@ const Navbar = () => {
               return (
                 <div className="bg-gray-100 m-2 w-[80%] cursor-pointer p-2 rounded-lg">
                   <div className="px-4 flex gap-8 ">
-                    <div className="bg-red-300">
-                      <img src={item.profile}  alt="image" />
+                    <div className="bg-red-300 flex justify-center items-center rounded-full w-10 h-10">
+                      <Link href={`/profile/${item.username}/${userName.userName}`}>
+                        <img src={item.profileImage} width={40} alt="image" />
+                        </Link>
                     </div>
                     <div>
                       <div>{item.username}</div>
                       <div className="text-xs text-gray-500">{item.name}</div>
                     </div>
                     <div className="">
-                    <button onClick={()=>{submitFollow(item._id)}} type="button" className="m-auto focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Follow</button>
+                    <button onClick={()=>{submitFollow(item.username)}} type="button" className={`  m-auto focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900`}>{isFollowing}</button>
 
                     </div>
                   </div>
@@ -214,6 +219,7 @@ const Navbar = () => {
               <li>
                 <Link
                   href="/profile"
+                  // onClick={()=>{sessionStorage.removeItem('user')}}
                   className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   Profile

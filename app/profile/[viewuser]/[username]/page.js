@@ -4,11 +4,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
+
 import { set } from "mongoose";
-const Profile = () => {
+const Profile = ({params}) => {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const router = useRouter();
+    const router = useRouter();
+    // const searchParams = useSearchParams();
+    const {viewuser,username}=params;
   const load = true;
+  const [customMessage, setCustomMessage] = useState("No posts yet!");
   const [ClickOnPost, setClickOnPost] = useState(false);
   const [popupData, setpopupData] = useState([]);
   const [name, setname] = useState("Name");
@@ -48,12 +53,21 @@ const Profile = () => {
     axios.get("/api/protected", {
       headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
-      const user = sessionStorage.getItem('user');
-      setname(response.data.user.name);
-      setuserName(response.data.user.userName);
-      settagline(response.data.user.description);
-      setimgUrl(response.data.user.profileImage);
-      getImages(response.data.user.userName);
+        console.log(viewuser);
+        const userData = axios.get(`/api/user/${viewuser}`).then((response) => {
+          // console.log((res.data));
+            setname(response.data.name);
+            setuserName(response.data.username);
+            settagline(response.data.description);
+            setimgUrl(response.data.profileImage);
+        }).then(() => {
+          const view = axios.get(`/api/view/${viewuser}/${username}`).then((res) => {
+            getImages(response.data.username);
+          }).catch((err) => {
+            // console.log(err);
+            setCustomMessage("follow to see posts!")
+            })
+          })
 
 
     }).catch((error) => {
@@ -138,8 +152,8 @@ const Profile = () => {
             {
               popupData && <div className="bg-white rounded-md overflow-hidden flex flex-col justify-center items-center pt-4 mx-8 mt-16">
                 <img src={`/api/images/${popupData.ImageUrl}`} className="w-[60%]" alt="" />
+                {/* {console.log(`/api/images/${popupData.ImageUrl}`)} */}
                 <div>
-                  {console.log(`/api/images${popupData.ImageUrl}`)}
                   <h1 className="text-center">{popupData.description}</h1>
                 </div>
                 <div className="flex justify-center gap-8 items-center p-2">
@@ -161,12 +175,13 @@ const Profile = () => {
                 return (
                   <div onClick={() => { togglePostView(); setpopupData(data) }} className="cursor-pointer relative w-[86%] flex justify-center items-center">
                     {data && data.ImageUrl && <img
-                      src={`/api/images${data.ImageUrl}`}
+                      src={`/api/images/${data.ImageUrl}`}
+                      
                       className="foto w-full h-full object-cover"
                       alt="description"
                     />
                     }
-                    {/* {console.log(data)} */}
+                    {console.log(data,`/api/images/${data.ImageUrl}`)}
                   </div>
                 );
               })}
@@ -176,7 +191,7 @@ const Profile = () => {
         }
         {
           !postsExist && <div className="w-full text-center">
-            No posts yet...
+            {customMessage}
           </div>
         }
       </div>

@@ -3,15 +3,15 @@ import React, { useState,useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation";
 import axios from "axios";
-const LeftContainer = () => {
+const LeftContainer = ({userName,name,imgUrl,followerCount,followingCount}) => {
   const router=useRouter();
   
-  const [name, setname] = useState("Name");
-  const [userName, setuserName] = useState("username");
+  const [name2, setname] = useState("Name");
+  const [userName2, setuserName] = useState("username");
   const [posts,setPosts]=useState(0);
   const [followers, setfollowers] = useState(0);
   const [following, setFollowing] = useState(0);
-  const [imgUrl, setimgUrl]=useState("https://w7.pngwing.com/pngs/193/660/png-transparent-computer-icons-woman-avatar-avatar-girl-thumbnail.png")
+  const [imgUrl2, setimgUrl]=useState("https://w7.pngwing.com/pngs/193/660/png-transparent-computer-icons-woman-avatar-avatar-girl-thumbnail.png")
   useEffect(()=>{
     
     
@@ -22,7 +22,7 @@ const LeftContainer = () => {
         <div className="bg-gray-100 h-full rounded-lg p-2">
           <div className="p-2 flex items-center justify-center mt-1 gap-2">
             <img
-              src="/commonAvatar.png"
+              src={imgUrl}
               alt="profile"
               className="object-cover w-[16%] rounded-full outline outline-white"
             />
@@ -34,11 +34,11 @@ const LeftContainer = () => {
           <div className="flex mt-4 justify-around text-gray-600">
             <div className="text-center">
               Followers
-              <div className="font-bold">{followers}</div>
+              <div className="font-bold">{followerCount}</div>
             </div>
             <div className="text-center">
               Following
-              <div className="font-bold">{following}</div>
+              <div className="font-bold">{followingCount}</div>
             </div>
             <div className="text-center">
               Posts

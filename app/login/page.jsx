@@ -41,7 +41,7 @@ const Login = () => {
                 toast.success("Login Successful!", toastOptions);
                 localStorage.setItem('token', token);
                 // console.log("Login Successful");
-                router.replace('/profile')
+                router.replace('/')
             }
         }
         catch (error) {
