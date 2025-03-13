@@ -40,10 +40,6 @@ const LeftContainer = ({userName,name,imgUrl,followerCount,followingCount}) => {
               Following
               <div className="font-bold">{followingCount}</div>
             </div>
-            <div className="text-center">
-              Posts
-              <div className="font-bold">{posts}</div>
-            </div>
           </div>
         </div>
       </div>

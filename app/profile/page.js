@@ -28,6 +28,10 @@ const Profile = () => {
     const response = await axios.get(`/api/post/getallpost/${userName}`);
     console.log(response.data.data[0]);
     setPostData(response.data.data[0])
+    const followData = await axios.get(`/api/follow/${userName}`);
+    setfollowers(followData.data.followerCount);
+    setFollowing(followData.data.followingCount);
+    console.log(followData.data);
     // console.log(response.data.data[0].length);
     if (response.data.data[0].length === 0) {
       setPostsExist(false);
@@ -107,13 +111,9 @@ const Profile = () => {
               <h1 className="text-base ">{tagline}</h1>
             </div>
             <ul className="flex justify-content-around items-center">
+              
               <li>
-                <span className=" text-base flex">
-                  <span className="font-bold mr-2">{posts} </span> Posts
-                </span>
-              </li>
-              <li>
-                <span className="cursor-pointer  text-base flex ml-5">
+                <span className="text-base flex ">
                   <span className="font-bold mr-2">{followers} </span> Followers
                 </span>
               </li>
