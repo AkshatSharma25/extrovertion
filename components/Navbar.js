@@ -225,14 +225,7 @@ const Navbar = (userName) => {
                   Profile
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/setting"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Settings
-                </Link>
-              </li>
+              
 
               <li>
                 <button
