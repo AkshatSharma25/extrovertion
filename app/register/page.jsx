@@ -19,12 +19,24 @@ const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [imageUrl, setImageUrl] = useState("");
+    function isAlphanumeric(str) {
+        return /^[a-zA-Z0-9]+$/.test(str);
+    }
     const [confirmPassword, setConfirmPassword] = useState("");
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            // console.log(password.length);
+            if (password.length < 8 || password.length > 12) {
+                toast.error('Passwords should atleast 8 digits and at most 12.', toastOptions);
+                return;
+            }
             if (password !== confirmPassword) {
                 toast.error('Passwords do not match!', toastOptions);
+                return;
+            }
+            if (!isAlphanumeric(userName)) { 
+                toast.error('Username should be alphanumeric!', toastOptions);
                 return;
             }
             toast.success("Waiting for server response!", toastOptions);
